@@ -44,7 +44,13 @@ ideas = {
 
 @app.post("/ideas")
 async def add_idea(idea: IdeaIn):
-    ideas[len(ideas) + 1] = Idea(len(ideas) + 1, idea.title, idea.desc)
+    if len(ideas) == 0:
+        ideas[1] = Idea(1, idea.title, idea.desc)
+    elif ideas.get(len(ideas) + 1) is None:
+        ideas[len(ideas) + 1] = Idea(len(ideas) + 1, idea.title, idea.desc)
+    else:
+        newNum = ideas[len(ideas) + 1].id + 1
+        ideas[newNum] = Idea(newNum, idea.title, idea.desc)
     return ideas
 
 
