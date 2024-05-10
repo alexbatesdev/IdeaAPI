@@ -1,0 +1,249 @@
+openapi: 3.0.2
+info:
+  title: FastAPI
+  version: 0.1.0
+servers:
+- url: /
+paths:
+  /ideas:
+    get:
+      operationId: get_ideas_ideas_get
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaList'
+          description: Successful Response
+      summary: Get Ideas
+    post:
+      operationId: add_idea_ideas_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaIn'
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaList'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Add Idea
+  /ideas/{idea_id}:
+    delete:
+      operationId: delete_idea_ideas__idea_id__delete
+      parameters:
+      - explode: false
+        in: path
+        name: idea_id
+        required: true
+        schema:
+          title: Idea Id
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdeaList'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Delete Idea
+    get:
+      operationId: get_idea_ideas__idea_id__get
+      parameters:
+      - explode: false
+        in: path
+        name: idea_id
+        required: true
+        schema:
+          title: Idea Id
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Get Idea
+    patch:
+      operationId: overwrite_idea_ideas__idea_id__patch
+      parameters:
+      - explode: false
+        in: path
+        name: idea_id
+        required: true
+        schema:
+          title: Idea Id
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaIn'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Overwrite Idea
+    put:
+      operationId: update_idea_ideas__idea_id__put
+      parameters:
+      - explode: false
+        in: path
+        name: idea_id
+        required: true
+        schema:
+          title: Idea Id
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdeaIn'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Idea'
+          description: Successful Response
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+          description: Validation Error
+      summary: Update Idea
+components:
+  schemas:
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          title: Detail
+          type: array
+      title: HTTPValidationError
+      type: object
+    Idea:
+      example:
+        date_created: 2000-01-23
+        id: 0
+        title: title
+        updated: 2000-01-23T04:56:07.000+00:00
+        desc: desc
+      properties:
+        id:
+          title: Id
+          type: integer
+        title:
+          title: Title
+          type: string
+        desc:
+          title: Desc
+          type: string
+        date_created:
+          format: date
+          title: Date Created
+          type: string
+        updated:
+          format: date-time
+          title: Updated
+          type: string
+      required:
+      - desc
+      - title
+      title: Idea
+      type: object
+    IdeaIn:
+      example:
+        title: title
+        desc: desc
+      properties:
+        title:
+          title: Title
+          type: string
+        desc:
+          title: Desc
+          type: string
+      required:
+      - desc
+      - title
+      title: IdeaIn
+      type: object
+    IdeaList:
+      example:
+        ideas:
+          key:
+            date_created: 2000-01-23
+            id: 0
+            title: title
+            updated: 2000-01-23T04:56:07.000+00:00
+            desc: desc
+      properties:
+        ideas:
+          additionalProperties:
+            $ref: '#/components/schemas/Idea'
+          title: Ideas
+          type: object
+      required:
+      - ideas
+      title: IdeaList
+      type: object
+    ValidationError:
+      properties:
+        loc:
+          items:
+            $ref: '#/components/schemas/Location_inner'
+          title: Location
+          type: array
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
+      required:
+      - loc
+      - msg
+      - type
+      title: ValidationError
+      type: object
+    Location_inner:
+      anyOf:
+      - type: string
+      - type: integer
+      title: Location_inner

@@ -40,7 +40,7 @@ ideas = {
 # Methods
 
 
-@app.post("/ideas", response_model=IdeaList)
+@app.post("/ideas", response_model=IdeaList, status_code=201)
 async def add_idea(idea: IdeaIn):
     if len(ideas) == 0:
         ideas[1] = Idea(id=1, title=idea.title, desc=idea.desc)
@@ -55,14 +55,14 @@ async def add_idea(idea: IdeaIn):
     return IdeaList(ideas=ideas)
 
 
-@app.get("/ideas", response_model=IdeaList)
+@app.get("/ideas", response_model=IdeaList, status_code=200)
 async def get_ideas():
     for idea in ideas.values():
         print(idea)
     return IdeaList(ideas=ideas)
 
 
-@app.get("/ideas/{idea_id}", response_model=Idea)
+@app.get("/ideas/{idea_id}", response_model=Idea, status_code=200)
 async def get_idea(idea_id):
     idea_id = int(idea_id)
     if ideas.get(idea_id) is None:
@@ -79,7 +79,7 @@ async def get_idea(idea_id):
         raise HTTPException(status_code=404, detail="Idea not found, oops")
 
 
-@app.patch("/ideas/{idea_id}", response_model=Idea)
+@app.patch("/ideas/{idea_id}", response_model=Idea, status_code=200)
 async def overwrite_idea(idea_id, idea_in: IdeaIn):
     idea_id = int(idea_id)
     if ideas.get(idea_id) is None:
@@ -103,7 +103,7 @@ async def overwrite_idea(idea_id, idea_in: IdeaIn):
         return newIdea
 
 
-@app.put("/ideas/{idea_id}", response_model=Idea)
+@app.put("/ideas/{idea_id}", response_model=Idea, status_code=200)
 async def update_idea(idea_id, idea_in: IdeaIn):
     idea_id = int(idea_id)
     if ideas.get(idea_id) is None:
@@ -119,7 +119,7 @@ async def update_idea(idea_id, idea_in: IdeaIn):
         return newIdea
 
 
-@app.delete("/ideas/{idea_id}", response_model=IdeaList)
+@app.delete("/ideas/{idea_id}", response_model=IdeaList, status_code=200)
 async def delete_idea(idea_id):
     ideas.pop(int(idea_id))
     return IdeaList(ideas=ideas)
